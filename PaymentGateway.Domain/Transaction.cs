@@ -8,9 +8,22 @@ namespace PaymentGateway.Domain
 {
     public class Transaction
     {
-        public int Id { get; set; }
-        public Order Order { get; set; }
-        public Card Card { get; set; }
-        public PaymentStatus Status { get; set; }
+        private static int count;
+
+        public Transaction()
+        {
+            this.Id = ++count;
+        }
+
+        public int Id { get; private set; }
+        public int Order_id { get; set; }
+        public string Card_number { get; set; }
+        public byte Expiry_month { get; set; }
+        public short Expiry_year { get; set; }
+        public string Cvv { get; set; }
+        public string Cardholder_name { get; set; }
+        public decimal Amount_kop { get; set; }
+        public DateTime Date { get; set; }
+        public TransactionStatus Status { get; set; }
     }
 }

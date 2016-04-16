@@ -20,24 +20,34 @@ namespace PaymentGateway.Libraries
             this.host = host;
         }
 
-        public async Task<string> Pay(int order_id, string card_number, byte expiry_month, short expiry_year, string cvv, string cardholder_name, decimal amount_kop)
+        public async Task<string> Pay(int order_id,
+                                      string card_number,
+                                      byte expiry_month,
+                                      short expiry_year,
+                                      string cvv,
+                                      string cardholder_name,
+                                      decimal amount_kop)
         {
             using(var httpClient = new HttpClient())
             {
                 SettingHttpClient(host, httpClient);
 
-                var order = new Order
+                var transaction = new Transaction()
                 {
-                    Id = order_id,
-                    Amount = amount_kop,
-                    Payer = cardholder_name,
-                    Paid = false
+                    Order_id = order_id,
+                    Card_number = cardholder_name,
+                    Expiry_month = expiry_month,
+                    Expiry_year = expiry_year,
+                    Cvv = cvv,
+                    Cardholder_name = cardholder_name,
+                    Amount_kop = amount_kop,
+                    Date = DateTime.Now,
+                    Status = TransactionStatus.OK
                 };
 
-                var response = await httpClient.PostAsJsonAsync("api/Pay", order);
+                var response = await httpClient.PostAsJsonAsync("api/Pay", transaction);
                 return response.StatusCode.ToString();
-            }
-            
+            }            
         }
 
         public void GetStatus(int order_id)

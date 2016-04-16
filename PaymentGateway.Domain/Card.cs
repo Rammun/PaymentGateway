@@ -106,5 +106,23 @@ namespace PaymentGateway.Domain
                 throw new Exception("Невозможно преобразовать последовательность к int");
             }
         }
+
+        public static bool operator ==(Card a, Card b)
+        {
+            return a.Card_number == b.Card_number &&
+                   a.Cvv == b.Cvv &&
+                   a.Expiry_month == b.Expiry_month &&
+                   a.Expiry_year == b.Expiry_year &&
+                   a.Cardholder_name == b.Cardholder_name;
+        }
+
+        public static bool operator !=(Card a, Card b)
+        {
+            return a.Card_number != b.Card_number ||
+                   a.Cvv != b.Cvv ||
+                   a.Expiry_month != b.Expiry_month ||
+                   a.Expiry_year != b.Expiry_year ||
+                   a.Cardholder_name != b.Cardholder_name;
+        }
     }
 }

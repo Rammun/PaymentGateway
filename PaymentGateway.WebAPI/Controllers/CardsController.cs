@@ -25,13 +25,13 @@ namespace PaymentGateway.WebAPI.Controllers
         [HttpPost]
         public void Post(Card card)
         {
-            Holder.CreateCard(card);
+            Holder.AddCard(card);
         }
 
         [HttpDelete]
         public void Delete(string card_number)
         {
-            Holder.DeleteCard(Holder.Cards.FirstOrDefault(c => c.Card_number == card_number));
+            Holder.DeleteCard(card_number);
         }
 
         //[HttpPut]

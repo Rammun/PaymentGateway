@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.Domain
 {
-    public enum PaymentStatus
+    public enum TransactionStatus
     {
         Error,
-        Access,
+        OK,
         Сancel
     }
 }

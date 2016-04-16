@@ -8,7 +8,14 @@ namespace PaymentGateway.Domain
 {
     public class Order
     {
-        public int Id { get; set; }
+        private static int count;
+
+        public Order()
+        {
+            this.Id = ++count;
+        }
+
+        public int Id { get; private set; }
         public decimal Amount { get; set; }
         public string Payer { get; set; }
         public bool Paid { get; set; }
