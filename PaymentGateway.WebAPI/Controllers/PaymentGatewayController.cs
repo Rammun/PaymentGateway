@@ -53,15 +53,28 @@ namespace PaymentGateway.WebAPI.Controllers
         }
 
         [HttpGet]
-        public void GetStatus(int order_id)
+        public string GetStatus(int order_id)
         {
-
+            var transaction = Holder.Transaction.FirstOrDefault(t => t.Order_id == order_id);
+            if (transaction == null)
+                return "Отсутствует транзакция на этот заказ";
+            return transaction.Status.ToString();
         }
 
         [HttpDelete]
-        public void Refund(int order_id)
+        public string Refund(int order_id)
         {
+            var transaction = Holder.Transaction.FirstOrDefault(t => t.Order_id == order_id);
+            if(transaction == null)
+                return "Отсутствует транзакция на этот заказ";
 
+            var card = Holder.Cards.FirstOrDefault(c => c.Card_number == transaction.Card_number);
+
+            Vendor.Cash -= transaction.Amount_kop;
+            if (card.Cash_limit != null)
+                card.Cash_limit += transaction.Amount_kop;
+            transaction.Status = TransactionStatus.Сancel;
+            return "Произведен возврат средств";
         }
 
     }
