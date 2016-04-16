@@ -7,13 +7,26 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.Domain
 {
-    public static class Holder
+    public static class Bank
     {
         private static List<Card> cards = new List<Card>();
         private static ReadOnlyCollection<Card> cardsReadOnly = new ReadOnlyCollection<Card>(cards);
 
         private static List<Transaction> transactions = new List<Transaction>();
         private static ReadOnlyCollection<Transaction> transactionReadOnly = new ReadOnlyCollection<Transaction>(transactions);
+
+        static Bank()
+        {
+            cards = new List<Card>
+            {
+                new Card ("1234567890123456", 1, 2020, "001", "R"),
+                new Card ("6543210987654321", 2, 2021, "011"),
+                new Card ("0987654321234567", 3, 2022, "111", "", 30000000),
+                new Card ("1234567890987654", 4, 2023, "002", "Ktoto"),
+                new Card ("1029384756473829", 5, 2024, "022", "This is I", 1000000),
+            };
+        }
+
 
         public static ReadOnlyCollection<Card> Cards { get { return cardsReadOnly; } }
         public static ReadOnlyCollection<Transaction> Transaction { get { return transactionReadOnly; } }

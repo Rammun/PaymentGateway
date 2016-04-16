@@ -13,6 +13,8 @@ namespace PaymentGateway.WebAPI.Controllers
         [HttpPost]
         public string Pay(Transaction transaction)
         {
+            Bank.AddTransaction(transaction);
+
             var vendorOrder = Vendor.Orders.FirstOrDefault(o => o.Id == transaction.Order_id);            
             if (vendorOrder == null)
             {
@@ -20,7 +22,7 @@ namespace PaymentGateway.WebAPI.Controllers
                 return "Заказа с таким номером не существует";
             }                
 
-            var consumerCard = Holder.Cards.FirstOrDefault(c => (c.Card_number == transaction.Card_number &&
+            var consumerCard = Bank.Cards.FirstOrDefault(c => (c.Card_number == transaction.Card_number &&
                                                                  c.Expiry_year == transaction.Expiry_year &&
                                                                  c.Expiry_month == transaction.Expiry_month &&
                                                                  c.Cvv == transaction.Cvv &&
@@ -55,20 +57,20 @@ namespace PaymentGateway.WebAPI.Controllers
         [HttpGet]
         public string GetStatus(int order_id)
         {
-            var transaction = Holder.Transaction.FirstOrDefault(t => t.Order_id == order_id);
+            var transaction = Bank.Transaction.FirstOrDefault(t => t.Order_id == order_id);
             if (transaction == null)
                 return "Отсутствует транзакция на этот заказ";
             return transaction.Status.ToString();
         }
 
-        [HttpDelete]
+        [HttpPut]
         public string Refund(int order_id)
         {
-            var transaction = Holder.Transaction.FirstOrDefault(t => t.Order_id == order_id);
+            var transaction = Bank.Transaction.FirstOrDefault(t => t.Order_id == order_id);
             if(transaction == null)
                 return "Отсутствует транзакция на этот заказ";
 
-            var card = Holder.Cards.FirstOrDefault(c => c.Card_number == transaction.Card_number);
+            var card = Bank.Cards.FirstOrDefault(c => c.Card_number == transaction.Card_number);
 
             Vendor.Cash -= transaction.Amount_kop;
             if (card.Cash_limit != null)

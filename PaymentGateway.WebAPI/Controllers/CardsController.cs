@@ -13,25 +13,25 @@ namespace PaymentGateway.WebAPI.Controllers
         [HttpGet]
         public IEnumerable<Card> Get()
         {
-            return Holder.Cards;
+            return Bank.Cards;
         }
 
         [HttpGet]
         public Card Get(string card_number)
         {
-            return Holder.Cards.FirstOrDefault(c => c.Card_number == card_number);
+            return Bank.Cards.FirstOrDefault(c => c.Card_number == card_number);
         }
 
         [HttpPost]
         public void Post(Card card)
         {
-            Holder.AddCard(card);
+            Bank.AddCard(card);
         }
 
         [HttpDelete]
         public void Delete(string card_number)
         {
-            Holder.DeleteCard(card_number);
+            Bank.DeleteCard(card_number);
         }
 
         //[HttpPut]

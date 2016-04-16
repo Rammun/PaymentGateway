@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardModel.cs" />
-    <Compile Include="Holder.cs" />
+    <Compile Include="Bank.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="TransactionStatus.cs" />

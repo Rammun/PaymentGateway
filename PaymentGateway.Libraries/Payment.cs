@@ -50,14 +50,26 @@ namespace PaymentGateway.Libraries
             }            
         }
 
-        public void GetStatus(int order_id)
+        public async Task<string> GetStatus(int order_id)
         {
+            using (var httpClient = new HttpClient())
+            {
+                SettingHttpClient(host, httpClient);
 
+                var response = await httpClient.GetAsync(string.Format(@"api/GetStatus/{0}", order_id));
+                return await response.Content.ReadAsAsync<string>();
+            }
         }
 
-        public void Refund(int order_id)
+        public async Task<string> Refund(int order_id)
         {
+            using (var httpClient = new HttpClient())
+            {
+                SettingHttpClient(host, httpClient);
 
+                var response = await httpClient.PutAsJsonAsync("api/Refund", order_id);
+                return await response.Content.ReadAsAsync<string>();
+            }
         }
 
         private void SettingHttpClient(string host, HttpClient httpClient)

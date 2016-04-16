@@ -86,7 +86,11 @@ namespace PaymentGateway.Domain
             }
         }
 
-        public decimal? Cash_limit { get; set; }
+        public decimal? Cash_limit
+        { 
+            get { return cash_limit; }
+            set { cash_limit = value; } 
+        }
 
         private bool IsNumbers(string value)
         {
@@ -107,13 +111,34 @@ namespace PaymentGateway.Domain
             }
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            Card c = obj as Card;
+            if ((System.Object)c == null)
+                return false;
+
+            return IsIdenticalCard(this, c);
+        }
+
+        public bool Equals(Card c)
+        {
+            if ((object)c == null)
+                return false;
+
+            return IsIdenticalCard(this, c);
+        }
+
+        public override int GetHashCode()
+        {
+            return Card_number.GetHashCode() ^ Cvv.GetHashCode();
+        }
+
         public static bool operator ==(Card a, Card b)
         {
-            return a.Card_number == b.Card_number &&
-                   a.Cvv == b.Cvv &&
-                   a.Expiry_month == b.Expiry_month &&
-                   a.Expiry_year == b.Expiry_year &&
-                   a.Cardholder_name == b.Cardholder_name;
+            return IsIdenticalCard(a, b);
         }
 
         public static bool operator !=(Card a, Card b)
@@ -124,5 +149,15 @@ namespace PaymentGateway.Domain
                    a.Expiry_year != b.Expiry_year ||
                    a.Cardholder_name != b.Cardholder_name;
         }
+
+        private static bool IsIdenticalCard(Card a, Card b)
+        {
+            return a.Card_number == b.Card_number &&
+                   a.Cvv == b.Cvv &&
+                   a.Expiry_month == b.Expiry_month &&
+                   a.Expiry_year == b.Expiry_year &&
+                   a.Cardholder_name == b.Cardholder_name;
+        }
+
     }
 }

@@ -13,7 +13,14 @@ namespace PaymentGateway.Domain
 
         static Vendor()
         {
-            Orders = new List<Order>();
+            Orders = new List<Order>
+            {
+                new Order { Amount = 1000 },
+                new Order { Amount = 20000 },
+                new Order { Amount = 300000 },
+                new Order { Amount = 4000000 },
+                new Order { Amount = 50000000 },
+            };
         }
     }
 }
