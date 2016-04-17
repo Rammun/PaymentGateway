@@ -93,7 +93,7 @@
   <ItemGroup>
     <Compile Include="DomainTests\BankTests.cs" />
     <Compile Include="DomainTests\CardTests.cs" />
-    <Compile Include="WebApi\PaymentGatewayControllerTest.cs" />
+    <Compile Include="WebApiTests\PaymentGatewayControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

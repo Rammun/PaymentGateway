@@ -12,21 +12,22 @@ namespace PaymentGateway.WebAPI.Controllers
     {
         [HttpPost]
         public string Pay(Transaction transaction)
-        {
+        {            
             Bank.AddTransaction(transaction);
 
-            var vendorOrder = Vendor.Orders.FirstOrDefault(o => o.Id == transaction.Order_id);            
+            var vendorOrder = Vendor.Orders.FirstOrDefault(o => o.Id == transaction.Order_id);
             if (vendorOrder == null)
             {
                 transaction.Status = TransactionStatus.Error;
                 return "Заказа с таким номером не существует";
-            }                
+            }
+            else vendorOrder.TransactionId = transaction.Id;
 
             var consumerCard = Bank.Cards.FirstOrDefault(c => (c.Card_number == transaction.Card_number &&
-                                                                 c.Expiry_year == transaction.Expiry_year &&
-                                                                 c.Expiry_month == transaction.Expiry_month &&
-                                                                 c.Cvv == transaction.Cvv &&
-                                                                 c.Cardholder_name == transaction.Cardholder_name));
+                                                               c.Expiry_year == transaction.Expiry_year &&
+                                                               c.Expiry_month == transaction.Expiry_month &&
+                                                               c.Cvv == transaction.Cvv &&
+                                                               c.Cardholder_name == transaction.Cardholder_name));
             if (consumerCard == null)
             {
                 transaction.Status = TransactionStatus.Error;
@@ -57,7 +58,7 @@ namespace PaymentGateway.WebAPI.Controllers
         [HttpGet]
         public string GetStatus(int order_id)
         {
-            var transaction = Bank.Transaction.FirstOrDefault(t => t.Order_id == order_id);
+            var transaction = Bank.Transactions.FirstOrDefault(t => t.Order_id == order_id);
             if (transaction == null)
                 return "Отсутствует транзакция на этот заказ";
             return transaction.Status.ToString();
@@ -66,17 +67,20 @@ namespace PaymentGateway.WebAPI.Controllers
         [HttpPut]
         public string Refund(int order_id)
         {
-            var transaction = Bank.Transaction.FirstOrDefault(t => t.Order_id == order_id);
+            var transaction = Bank.Transactions.FirstOrDefault(t => t.Order_id == order_id);
             if(transaction == null)
-                return "Отсутствует транзакция на этот заказ";
+                return string.Format("Отсутствует транзакция на заказ {0}", order_id);
 
             var card = Bank.Cards.FirstOrDefault(c => c.Card_number == transaction.Card_number);
+
+            if (transaction.Status != TransactionStatus.OK)
+                return "Денежные средства по транзакции не переведены";
 
             Vendor.Cash -= transaction.Amount_kop;
             if (card.Cash_limit != null)
                 card.Cash_limit += transaction.Amount_kop;
             transaction.Status = TransactionStatus.Сancel;
-            return "Произведен возврат средств";
+            return string.Format("Произведен возврат средств по заказу {0}", order_id);
         }
 
     }

@@ -8,6 +8,7 @@ namespace PaymentGateway.Domain
 {
     public enum TransactionStatus
     {
+        Empty,
         Error,
         OK,
         Сancel

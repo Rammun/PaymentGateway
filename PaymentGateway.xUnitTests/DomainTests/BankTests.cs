@@ -48,5 +48,57 @@ namespace PaymentGateway.xUnitTests.DomainTests
             Assert.NotNull(ex);
             Assert.IsType<Exception>(ex);
         }
+
+        [Fact]
+        public void Bank_AddTransaction_Count()
+        {
+            var countBefore = Bank.Transactions.Count;
+            Bank.AddTransaction(new Transaction
+                                {
+                                    Order_id = 1,
+                                    Card_number = "1234567890987654",
+                                    Expiry_month = 4,
+                                    Expiry_year = 2023,
+                                    Cvv = "002",
+                                    Cardholder_name = "Ktoto",
+                                    Amount_kop = 10000,
+                                    Date = DateTime.Now
+                                });
+            var countAfter = Bank.Transactions.Count;
+
+            Assert.Equal(countAfter - countBefore, 1);
+        }
+
+        [Fact]
+        public void Bank_DeleteTransaction_Count()
+        {
+            Bank.AddTransaction(new Transaction
+            {
+                Order_id = 1,
+                Card_number = "1234567890987654",
+                Expiry_month = 4,
+                Expiry_year = 2023,
+                Cvv = "002",
+                Cardholder_name = "Ktoto",
+                Amount_kop = 10000,
+                Date = DateTime.Now
+            });
+            var countBefore = Bank.Transactions.Count;
+            Bank.DeleteTransaction(1);
+            var countAfter = Bank.Transactions.Count;
+
+            Assert.Equal(countBefore - countAfter, 1);
+        }
+
+        [Fact]
+        public void Bank_DeleteTransaction_NonExistentCard()
+        {
+            Action method = () => { Bank.DeleteCard("1111111111111111"); };
+
+            var ex = Record.Exception(method);
+
+            Assert.NotNull(ex);
+            Assert.IsType<Exception>(ex);
+        }
     }
 }

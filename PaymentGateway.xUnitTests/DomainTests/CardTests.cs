@@ -51,23 +51,23 @@ namespace PaymentGateway.xUnitTests.DomainTests
             Assert.IsType<Exception>(ex);
         }
 
-        //[Fact]
-        //public void CardsAreEqual1_True()
-        //{
-        //    var card1 = new Card("1234567890987654", 1, 2020, "500");
-        //    var card2 = new Card("1234567890987654", 1, 2020, "500", "", 200000);
+        [Fact]
+        public void Card_IsEquals_True()
+        {
+            var card1 = new Card("1234567890987654", 1, 2020, "500");
+            var card2 = new Card("1234567890987654", 1, 2020, "500", "", 200000);
 
-        //    Assert.True(card1 == card2);
-        //}
+            Assert.True(card1.IsEquals(card2));
+        }
 
-        //[Fact]
-        //public void CardsAreNotEqual_False()
-        //{
-        //    var card1 = new Card("1234567890987654", 1, 2020, "500");
-        //    var card2 = new Card("1234567890987654", 1, 2020, "500", "", 200000);
+        [Fact]
+        public void Card_IsEquals_False()
+        {
+            var card1 = new Card("1234567890987654", 1, 2020, "500");
+            var card2 = new Card("1234567890987654", 1, 2020, "500", "R");
 
-        //    Assert.False(card1 != card2);
-        //}
+            Assert.False(card1.IsEquals(card2));
+        }
 
         [Theory]
         [InlineData("0234567890987654", 1, 2020, "500", "", null)]   // Отличается номер карты

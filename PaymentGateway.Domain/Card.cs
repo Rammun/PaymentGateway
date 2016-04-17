@@ -22,12 +22,12 @@ namespace PaymentGateway.Domain
                     string cardholder_name = "",
                     decimal? cash_limit = null)
         {
-            this.Card_number = card_number;
-            this.Expiry_month = expiry_month;
-            this.Expiry_year = expiry_year;
-            this.Cvv = cvv;
-            this.Cardholder_name = cardholder_name;
-            this.Cash_limit = cash_limit;
+            Card_number = card_number;
+            Expiry_month = expiry_month;
+            Expiry_year = expiry_year;
+            Cvv = cvv;
+            Cardholder_name = cardholder_name;
+            Cash_limit = cash_limit;
         }
 
         public string Card_number
@@ -109,6 +109,17 @@ namespace PaymentGateway.Domain
             {
                 throw new Exception("Невозможно преобразовать последовательность к int");
             }
+        }
+
+        public bool IsEquals(Card card)
+        {
+            if (card == null)
+                return false;
+            return Card_number == card.Card_number &&
+                   Cvv == card.Cvv &&
+                   Expiry_month == card.Expiry_month &&
+                   Expiry_year == card.Expiry_year &&
+                   Cardholder_name == card.Cardholder_name;
         }
 
         //public override bool Equals(object obj)

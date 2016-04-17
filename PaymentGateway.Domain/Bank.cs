@@ -33,7 +33,7 @@ namespace PaymentGateway.Domain
 
 
         public static ReadOnlyCollection<Card> Cards { get { return cardsReadOnly; } }
-        public static ReadOnlyCollection<Transaction> Transaction { get { return transactionReadOnly; } }
+        public static ReadOnlyCollection<Transaction> Transactions { get { return transactionReadOnly; } }
 
         public static void AddCard(Card card)
         {

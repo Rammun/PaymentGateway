@@ -13,8 +13,10 @@ namespace PaymentGateway.Domain
         public Transaction()
         {
             this.Id = ++count;
+            this.Date = DateTime.Now;
+            this.Status = TransactionStatus.Empty;
         }
-
+        
         public int Id { get; private set; }
         public int Order_id { get; set; }
         public string Card_number { get; set; }

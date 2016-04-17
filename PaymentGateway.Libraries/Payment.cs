@@ -42,7 +42,7 @@ namespace PaymentGateway.Libraries
                     Cardholder_name = cardholder_name,
                     Amount_kop = amount_kop,
                     Date = DateTime.Now,
-                    Status = TransactionStatus.OK
+                    Status = TransactionStatus.Empty
                 };
 
                 var response = await httpClient.PostAsJsonAsync("api/Pay", transaction);
