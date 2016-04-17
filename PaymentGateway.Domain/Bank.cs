@@ -9,11 +9,11 @@ namespace PaymentGateway.Domain
 {
     public static class Bank
     {
-        private static List<Card> cards = new List<Card>();
-        private static ReadOnlyCollection<Card> cardsReadOnly = new ReadOnlyCollection<Card>(cards);
+        private static List<Card> cards;
+        private static ReadOnlyCollection<Card> cardsReadOnly;
 
-        private static List<Transaction> transactions = new List<Transaction>();
-        private static ReadOnlyCollection<Transaction> transactionReadOnly = new ReadOnlyCollection<Transaction>(transactions);
+        private static List<Transaction> transactions;
+        private static ReadOnlyCollection<Transaction> transactionReadOnly;
 
         static Bank()
         {
@@ -25,6 +25,10 @@ namespace PaymentGateway.Domain
                 new Card ("1234567890987654", 4, 2023, "002", "Ktoto"),
                 new Card ("1029384756473829", 5, 2024, "022", "This is I", 1000000),
             };
+            cardsReadOnly = new ReadOnlyCollection<Card>(cards);
+
+            transactions = new List<Transaction>();
+            transactionReadOnly = new ReadOnlyCollection<Transaction>(transactions);
         }
 
 
@@ -33,6 +37,8 @@ namespace PaymentGateway.Domain
 
         public static void AddCard(Card card)
         {
+            if (cards.FirstOrDefault(c => c.Card_number == card.Card_number) != null)
+                throw new Exception(string.Format("Карта с номером {0} существует", card.Card_number));
             cards.Add(card);
         }
 
