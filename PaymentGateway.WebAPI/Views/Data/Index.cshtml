@@ -1,0 +1,44 @@
+﻿@using PaymentGateway.WebAPI.Models
+@model DataViewModel
+
+@{
+    ViewBag.Title = "Repository";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Repository</h2>
+<div>
+    <p>Счет продавца: @Model.vendor_cash</p>
+    <h3>Список карт</h3>
+    <table border="1">
+        <tr>
+            <th>Номер карты</th>
+            <th>Лимит средств</th>
+        </tr>
+        @foreach (var card in Model.cards)
+        {
+            <tr>
+                <td>@card.Card_number</td>
+                <td>@card.Cash_limit</td>
+            </tr>
+        }
+    </table>
+    <h3>Список транзакций</h3>
+    <table border="1">
+        <tr>
+            <th>Номер заказа</th>
+            <th>Номер карты</th>
+            <th>Сумма</th>
+            <th>Статус</th>
+        </tr>
+        @foreach (var transaction in Model.transaction)
+        {
+            <tr>
+                <td>@transaction.Order_id</td>
+                <td>@transaction.Card_number</td>
+                <td>@transaction.Amount_kop</td>
+                <td>@transaction.Status</td>
+            </tr>
+        }
+    </table>
+</div>

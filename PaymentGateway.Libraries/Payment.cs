@@ -35,7 +35,7 @@ namespace PaymentGateway.Libraries
                 var transaction = new Transaction()
                 {
                     Order_id = order_id,
-                    Card_number = cardholder_name,
+                    Card_number = card_number,
                     Expiry_month = expiry_month,
                     Expiry_year = expiry_year,
                     Cvv = cvv,
@@ -45,8 +45,9 @@ namespace PaymentGateway.Libraries
                     Status = TransactionStatus.Empty
                 };
 
-                var response = await httpClient.PostAsJsonAsync("api/Pay", transaction);
-                return response.StatusCode.ToString();
+                var response = httpClient.PostAsJsonAsync("api/PaymentGateway", transaction).Result;
+                var answer = await response.Content.ReadAsAsync<string>();
+                return answer;
             }            
         }
 
@@ -56,7 +57,7 @@ namespace PaymentGateway.Libraries
             {
                 SettingHttpClient(host, httpClient);
 
-                var response = await httpClient.GetAsync(string.Format(@"api/GetStatus/{0}", order_id));
+                var response = await httpClient.GetAsync(string.Format(@"api/PaymentGateway/{0}", order_id));
                 return await response.Content.ReadAsAsync<string>();
             }
         }
@@ -67,7 +68,7 @@ namespace PaymentGateway.Libraries
             {
                 SettingHttpClient(host, httpClient);
 
-                var response = await httpClient.PutAsJsonAsync("api/Refund", order_id);
+                var response = await httpClient.PutAsJsonAsync("api/PaymentGateway", order_id);
                 return await response.Content.ReadAsAsync<string>();
             }
         }

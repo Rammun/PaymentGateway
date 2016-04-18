@@ -13,7 +13,7 @@ namespace PaymentGateway.xUnitTests.DomainTests
         [Fact]
         public void BankDefault()
         {
-            var count = Bank.Cards.Count;
+            var count = BankRepository.Cards.Count;
 
             Assert.Equal(count, 5);
         }
@@ -21,9 +21,9 @@ namespace PaymentGateway.xUnitTests.DomainTests
         [Fact]
         public void Bank_AddCard_Count()
         {
-            var countBefore = Bank.Cards.Count;
-            Bank.AddCard(new Card("1324354657687980", 1, 2020, "001", "R"));
-            var countAfter = Bank.Cards.Count;
+            var countBefore = BankRepository.Cards.Count;
+            BankRepository.AddCard(new Card("1324354657687980", 1, 2020, "001", "R"));
+            var countAfter = BankRepository.Cards.Count;
 
             Assert.Equal(countAfter - countBefore, 1);
         }
@@ -31,9 +31,9 @@ namespace PaymentGateway.xUnitTests.DomainTests
         [Fact]
         public void Bank_DeleteCard_Count()
         {
-            var countBefore = Bank.Cards.Count;
-            Bank.DeleteCard("1234567890987654");
-            var countAfter = Bank.Cards.Count;
+            var countBefore = BankRepository.Cards.Count;
+            BankRepository.DeleteCard("1234567890987654");
+            var countAfter = BankRepository.Cards.Count;
 
             Assert.Equal(countBefore - countAfter, 1);
         }
@@ -41,7 +41,7 @@ namespace PaymentGateway.xUnitTests.DomainTests
         [Fact]
         public void Bank_DeleteCard_NonExistentCard()
         {
-            Action method = () => { Bank.DeleteCard("1111111111111111"); };
+            Action method = () => { BankRepository.DeleteCard("1111111111111111"); };
 
             var ex = Record.Exception(method);
 
@@ -52,8 +52,8 @@ namespace PaymentGateway.xUnitTests.DomainTests
         [Fact]
         public void Bank_AddTransaction_Count()
         {
-            var countBefore = Bank.Transactions.Count;
-            Bank.AddTransaction(new Transaction
+            var countBefore = BankRepository.Transactions.Count;
+            BankRepository.AddTransaction(new Transaction
                                 {
                                     Order_id = 1,
                                     Card_number = "1234567890987654",
@@ -64,7 +64,7 @@ namespace PaymentGateway.xUnitTests.DomainTests
                                     Amount_kop = 10000,
                                     Date = DateTime.Now
                                 });
-            var countAfter = Bank.Transactions.Count;
+            var countAfter = BankRepository.Transactions.Count;
 
             Assert.Equal(countAfter - countBefore, 1);
         }
@@ -72,7 +72,7 @@ namespace PaymentGateway.xUnitTests.DomainTests
         [Fact]
         public void Bank_DeleteTransaction_Count()
         {
-            Bank.AddTransaction(new Transaction
+            BankRepository.AddTransaction(new Transaction
             {
                 Order_id = 1,
                 Card_number = "1234567890987654",
@@ -83,9 +83,9 @@ namespace PaymentGateway.xUnitTests.DomainTests
                 Amount_kop = 10000,
                 Date = DateTime.Now
             });
-            var countBefore = Bank.Transactions.Count;
-            Bank.DeleteTransaction(1);
-            var countAfter = Bank.Transactions.Count;
+            var countBefore = BankRepository.Transactions.Count;
+            BankRepository.DeleteTransaction(1);
+            var countAfter = BankRepository.Transactions.Count;
 
             Assert.Equal(countBefore - countAfter, 1);
         }
@@ -93,7 +93,7 @@ namespace PaymentGateway.xUnitTests.DomainTests
         [Fact]
         public void Bank_DeleteTransaction_NonExistentCard()
         {
-            Action method = () => { Bank.DeleteCard("1111111111111111"); };
+            Action method = () => { BankRepository.DeleteCard("1111111111111111"); };
 
             var ex = Record.Exception(method);
 

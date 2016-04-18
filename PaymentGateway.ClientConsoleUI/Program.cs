@@ -11,35 +11,58 @@ namespace PaymentGateway.ClientConsoleUI
 {
     class Program
     {
-        static List<string> list = new List<string>();
-        static ReadOnlyCollection<string> readOnlyList = new ReadOnlyCollection<string>(list);
-
         static void Main(string[] args)
         {
-            list = new List<string>();
-            readOnlyList = new ReadOnlyCollection<string>(list);
-            list.Add("rus");
-            list.Add("aaa");
-            list.Add("bbb");
-            foreach (var item in readOnlyList)
-            {
-                Console.WriteLine(item);
-            }
-            Console.ReadKey();
+            RunAsync().Wait();
         }
 
-        //static void Main()
-        //{
-        //    RunAsync().Wait();
-        //}
+        static async Task RunAsync()
+        {
+            const int ORDER_NUMBER = 1;
+            const decimal AMOUNT_KOP = 20000000m;
 
-        //static async Task RunAsync()
-        //{
-        //    var payment = new Payment("http://localhost:33990/");
+            // Безлимитная карта
+            //const string CARD_NUMBER = "1234567890987654";
+            //const byte EXPIRY_MONTH = 4;
+            //const short EXPIRY_YEAR = 2023;
+            //const string CVV = "002";
+            //const string CARDHOLDER_NAME = "Ktoto";
 
-        //    var answer = await payment.Pay(111, "123123", (byte)1, (short)2017, "500", "Ruslan", (decimal)1000000);
-        //    Console.WriteLine(answer);
-        //    Console.ReadKey();
-        //}
+            // Карта с лимитом 30000000
+            const string CARD_NUMBER = "0987654321234567";
+            const byte EXPIRY_MONTH = 3;
+            const short EXPIRY_YEAR = 2022;
+            const string CVV = "111";
+            const string CARDHOLDER_NAME = "";
+
+            Console.WriteLine("Нажмите любую клавишу после полного запуска веб сервера...");
+            Console.ReadKey();
+
+            var payment = new Payment("http://localhost:33990/");  // Здесь указать свой локальный хост
+
+            while(true)
+            {
+                var card = BankRepository.Cards.FirstOrDefault(c => c.Card_number == CARD_NUMBER);
+                string cash;
+                if (card.Cash_limit == null)
+                    cash = "безлимит";
+                else cash = card.Cash_limit.ToString();
+
+                Console.WriteLine("Производим трансфер на сумму {0} ...", AMOUNT_KOP);
+
+                var answer = await payment.Pay(ORDER_NUMBER,
+                                               CARD_NUMBER,
+                                               EXPIRY_MONTH,
+                                               EXPIRY_YEAR,
+                                               CVV,
+                                               CARDHOLDER_NAME,
+                                               AMOUNT_KOP);
+
+                Console.WriteLine("Результат операции: {0}", answer);
+                Console.WriteLine();
+
+                Console.ReadKey();
+            }            
+        }
     }
 }

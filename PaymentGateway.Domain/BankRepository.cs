@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.Domain
 {
-    public static class Bank
+    public static class BankRepository
     {
         private static List<Card> cards;
         private static ReadOnlyCollection<Card> cardsReadOnly;
@@ -15,7 +15,7 @@ namespace PaymentGateway.Domain
         private static List<Transaction> transactions;
         private static ReadOnlyCollection<Transaction> transactionReadOnly;
 
-        static Bank()
+        static BankRepository()
         {
             cards = new List<Card>
             {

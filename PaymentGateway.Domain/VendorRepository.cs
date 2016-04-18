@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.Domain
 {
-    public static class Vendor
+    public static class VendorRepository
     {
         public static ICollection<Order> Orders { get; private set; }
         public static decimal Cash { get; set; }
 
-        static Vendor()
+        static VendorRepository()
         {
             Orders = new List<Order>
             {

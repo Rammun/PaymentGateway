@@ -65,16 +65,16 @@ namespace PaymentGateway.xUnitTests.WebApiTests
             };
 
             // Запоминаем состояние счетов до перевода денег
-            var card = Bank.Cards.FirstOrDefault(c => c.Card_number == card_number);
+            var card = BankRepository.Cards.FirstOrDefault(c => c.Card_number == card_number);
             var cardCashBefore = card.Cash_limit;
-            var vendorCashBefore = Vendor.Cash;
+            var vendorCashBefore = VendorRepository.Cash;
             
             // Переводим деньги
             var answer = paymentGatewayController.Pay(transaction);
 
             // Запоминаем состояние счетов после перевода денег
             var cardCashAfter = card.Cash_limit;
-            var vendorCashAfter = Vendor.Cash;
+            var vendorCashAfter = VendorRepository.Cash;
 
             var cardDifference = cardCashBefore - cardCashAfter;
             var vendorDifference = vendorCashAfter - vendorCashBefore;
@@ -100,7 +100,7 @@ namespace PaymentGateway.xUnitTests.WebApiTests
                 Order_id = order_id,
                 Status = status
             };
-            Bank.AddTransaction(transaction);
+            BankRepository.AddTransaction(transaction);
 
             var answer = paymentGatewayController.GetStatus(order_id);
 
@@ -123,16 +123,16 @@ namespace PaymentGateway.xUnitTests.WebApiTests
                 Amount_kop = 10000,
                 Status = TransactionStatus.OK
             };
-            Bank.AddTransaction(transaction);
-            var card = Bank.Cards.FirstOrDefault(c => c.Card_number == transaction.Card_number);
+            BankRepository.AddTransaction(transaction);
+            var card = BankRepository.Cards.FirstOrDefault(c => c.Card_number == transaction.Card_number);
 
             var cardCashBefore = card.Cash_limit;
-            var vendorCashBefore = Vendor.Cash;
+            var vendorCashBefore = VendorRepository.Cash;
 
             var answer = paymentGatewayController.Refund(4);
 
             var cardCashAfter = card.Cash_limit;
-            var vendorCashAfter = Vendor.Cash;
+            var vendorCashAfter = VendorRepository.Cash;
 
             var cardDifference = cardCashAfter - cardCashBefore;
             var vendorDifference = vendorCashBefore - vendorCashAfter;
@@ -156,7 +156,7 @@ namespace PaymentGateway.xUnitTests.WebApiTests
         public void Refund_OrderId_StatusFail()
         {
             var paymentGatewayController = new PaymentGatewayController();
-            Bank.AddTransaction(new Transaction { Order_id = 11, Status = TransactionStatus.Error });
+            BankRepository.AddTransaction(new Transaction { Order_id = 11, Status = TransactionStatus.Error });
 
             var answer = paymentGatewayController.Refund(11);
 

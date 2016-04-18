@@ -15,6 +15,7 @@ namespace PaymentGateway.Domain
             this.Id = ++count;
             this.Date = DateTime.Now;
             this.Status = TransactionStatus.Empty;
+            this.Message = string.Empty;
         }
         
         public int Id { get; private set; }
@@ -27,5 +28,6 @@ namespace PaymentGateway.Domain
         public decimal Amount_kop { get; set; }
         public DateTime Date { get; set; }
         public TransactionStatus Status { get; set; }
+        public string Message { get; set; }
     }
 }
