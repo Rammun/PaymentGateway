@@ -19,7 +19,7 @@ namespace PaymentGateway.ClientConsoleUI
         static async Task RunAsync()
         {
             const int ORDER_NUMBER = 1;
-            const decimal AMOUNT_KOP = 20000000m;
+            const decimal AMOUNT_KOP = 15000000m;
 
             // Безлимитная карта
             //const string CARD_NUMBER = "1234567890987654";
@@ -35,22 +35,26 @@ namespace PaymentGateway.ClientConsoleUI
             const string CVV = "111";
             const string CARDHOLDER_NAME = "";
 
+            // Рандомная карта для отлова ошибок
+            //const string CARD_NUMBER = "0987654321234567";
+            //const byte EXPIRY_MONTH = 3;
+            //const short EXPIRY_YEAR = 2022;
+            //const string CVV = "111";
+            //const string CARDHOLDER_NAME = "";
+
             Console.WriteLine("Нажмите любую клавишу после полного запуска веб сервера...");
             Console.ReadKey();
 
             var payment = new Payment("http://localhost:33990/");  // Здесь указать свой локальный хост
 
+            var card = BankRepository.Cards.FirstOrDefault(c => c.Card_number == CARD_NUMBER);
+            string answer = string.Empty;
+
+            // Тестирует метод Pay(...)
             while(true)
             {
-                var card = BankRepository.Cards.FirstOrDefault(c => c.Card_number == CARD_NUMBER);
-                string cash;
-                if (card.Cash_limit == null)
-                    cash = "безлимит";
-                else cash = card.Cash_limit.ToString();
-
-                Console.WriteLine("Производим трансфер на сумму {0} ...", AMOUNT_KOP);
-
-                var answer = await payment.Pay(ORDER_NUMBER,
+                Console.WriteLine("Производим трансферт на сумму {0} ...", AMOUNT_KOP);
+                answer = await payment.Pay(ORDER_NUMBER,
                                                CARD_NUMBER,
                                                EXPIRY_MONTH,
                                                EXPIRY_YEAR,
@@ -60,9 +64,26 @@ namespace PaymentGateway.ClientConsoleUI
 
                 Console.WriteLine("Результат операции: {0}", answer);
                 Console.WriteLine();
+                var key = Console.ReadKey();
+                if (key.Key == ConsoleKey.Escape)
+                    break;
+            }
+            
+            // Тестируем метод GetStatus(...)
+            for (int i = 1; i <= 5; i++)
+            {
+                answer = await payment.GetStatus(i);
+                Console.WriteLine("Статус заказа {0}: {1}", i, answer);
+            }
+            Console.ReadKey();
 
-                Console.ReadKey();
-            }            
+            // Тестируем метод Refund(...)
+            for (int i = 1; i <= 3; i++)
+            {
+                answer = await payment.Refund(i);
+                Console.WriteLine("Возврат платежа заказа {0}: {1}", i, answer);
+            }
+            Console.ReadKey();
         }
     }
 }

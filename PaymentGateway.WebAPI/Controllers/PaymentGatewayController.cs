@@ -19,31 +19,35 @@ namespace PaymentGateway.WebAPI.Controllers
             if (vendorOrder == null)
             {
                 transaction.Status = TransactionStatus.Error;
-                return "Заказа с таким номером не существует";
+                transaction.Message = "Заказа с таким номером не существует";
+                return transaction.Message;
             }
             else vendorOrder.TransactionId = transaction.Id;
 
             var consumerCard = BankRepository.Cards.FirstOrDefault(c => (c.Card_number == transaction.Card_number &&
-                                                               c.Expiry_year == transaction.Expiry_year &&
-                                                               c.Expiry_month == transaction.Expiry_month &&
-                                                               c.Cvv == transaction.Cvv &&
-                                                               c.Cardholder_name == transaction.Cardholder_name));
+                                                                         c.Expiry_year == transaction.Expiry_year &&
+                                                                         c.Expiry_month == transaction.Expiry_month &&
+                                                                         c.Cvv == transaction.Cvv &&
+                                                                         c.Cardholder_name == transaction.Cardholder_name));
             if (consumerCard == null)
             {
                 transaction.Status = TransactionStatus.Error;
-                return "Карты с такими данными не существует";
+                transaction.Message = "Карты с такими данными не существует";
+                return transaction.Message;
             }                
 
             if (DateTime.Now >= new DateTime(consumerCard.Expiry_year, consumerCard.Expiry_month, 1))
             {
                 transaction.Status = TransactionStatus.Error;
-                return "Истек срок действия карты";
+                transaction.Message = "Истек срок действия карты";
+                return transaction.Message;
             }
 
             if (consumerCard.Cash_limit != null && consumerCard.Cash_limit < transaction.Amount_kop)
             {
                 transaction.Status = TransactionStatus.Error;
-                return "Недостаточно средств на счету";
+                transaction.Message = "Недостаточно средств на счету";
+                return transaction.Message;
             }                
 
             if(consumerCard.Cash_limit != null)
@@ -52,7 +56,8 @@ namespace PaymentGateway.WebAPI.Controllers
             }
             VendorRepository.Cash += transaction.Amount_kop;
             transaction.Status = TransactionStatus.OK;
-            return "Транзакция проведена успешно";
+            transaction.Message = "Транзакция проведена успешно";
+            return transaction.Message;
         }
 
         [HttpGet]
@@ -64,7 +69,7 @@ namespace PaymentGateway.WebAPI.Controllers
             return transaction.Status.ToString();
         }
 
-        [HttpPut]
+        [HttpDelete]
         public string Refund(int order_id)
         {
             var transaction = BankRepository.Transactions.FirstOrDefault(t => t.Order_id == order_id);
@@ -79,8 +84,10 @@ namespace PaymentGateway.WebAPI.Controllers
             VendorRepository.Cash -= transaction.Amount_kop;
             if (card.Cash_limit != null)
                 card.Cash_limit += transaction.Amount_kop;
+
             transaction.Status = TransactionStatus.Сancel;
-            return string.Format("Произведен возврат средств по заказу {0}", order_id);
+            transaction.Message = "Платеж возвращен";
+            return string.Format("Произведен возврат средств по заказу {0} на карту {1}", order_id, card.Card_number);
         }
 
     }

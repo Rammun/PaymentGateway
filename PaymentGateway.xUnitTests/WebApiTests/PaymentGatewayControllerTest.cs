@@ -139,7 +139,7 @@ namespace PaymentGateway.xUnitTests.WebApiTests
 
             Assert.Equal(transaction.Status, TransactionStatus.Сancel);
             Assert.Equal(cardDifference, vendorDifference);
-            Assert.Equal(answer, "Произведен возврат средств по заказу 4");
+            Assert.Equal(answer, "Произведен возврат средств по заказу 4 на карту 1029384756473829");
         }
 
         [Fact]

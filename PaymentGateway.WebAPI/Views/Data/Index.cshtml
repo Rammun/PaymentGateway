@@ -19,7 +19,16 @@
         {
             <tr>
                 <td>@card.Card_number</td>
-                <td>@card.Cash_limit</td>
+                <td>
+                    @if (card.Cash_limit == null)
+                    {
+                        <span>безлимитная</span>
+                    }
+                    else
+                    {
+                         @card.Cash_limit
+                    }
+                </td>
             </tr>
         }
     </table>
@@ -30,6 +39,7 @@
             <th>Номер карты</th>
             <th>Сумма</th>
             <th>Статус</th>
+            <th>Сообщение</th>
         </tr>
         @foreach (var transaction in Model.transaction)
         {
@@ -38,6 +48,7 @@
                 <td>@transaction.Card_number</td>
                 <td>@transaction.Amount_kop</td>
                 <td>@transaction.Status</td>
+                <td>@transaction.Message</td>
             </tr>
         }
     </table>

@@ -57,7 +57,7 @@ namespace PaymentGateway.Libraries
             {
                 SettingHttpClient(host, httpClient);
 
-                var response = await httpClient.GetAsync(string.Format(@"api/PaymentGateway/{0}", order_id));
+                var response = await httpClient.GetAsync(string.Format(@"api/PaymentGateway?order_id={0}", order_id));
                 return await response.Content.ReadAsAsync<string>();
             }
         }
@@ -68,7 +68,7 @@ namespace PaymentGateway.Libraries
             {
                 SettingHttpClient(host, httpClient);
 
-                var response = await httpClient.PutAsJsonAsync("api/PaymentGateway", order_id);
+                var response = await httpClient.DeleteAsync(string.Format(@"api/PaymentGateway?order_id={0}", order_id));
                 return await response.Content.ReadAsAsync<string>();
             }
         }
