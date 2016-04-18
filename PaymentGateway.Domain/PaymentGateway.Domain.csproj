@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardModel.cs" />
     <Compile Include="BankRepository.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="Order.cs" />
