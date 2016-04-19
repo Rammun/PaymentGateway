@@ -49,10 +49,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PaymentGateway.Domain\PaymentGateway.Domain.csproj">
-      <Project>{86489b2e-901f-426d-94a4-d33c0be7d13a}</Project>
-      <Name>PaymentGateway.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PaymentGateway.Libraries\PaymentGateway.Libraries.csproj">
       <Project>{73cc6617-5538-459d-8b98-bf7abe21cec5}</Project>
       <Name>PaymentGateway.Libraries</Name>

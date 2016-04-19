@@ -17,6 +17,7 @@ namespace PaymentGateway.Domain
 
         public int Id { get; private set; }
         public decimal Amount { get; set; }
+        public decimal Received { get; set; }
         public int TransactionId { get; set; }
     }
 }

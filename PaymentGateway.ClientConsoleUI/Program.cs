@@ -1,5 +1,4 @@
-﻿using PaymentGateway.Domain;
-using PaymentGateway.Libraries;
+﻿using PaymentGateway.Libraries;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -47,7 +46,6 @@ namespace PaymentGateway.ClientConsoleUI
 
             var payment = new Payment("http://localhost:33990/");  // Здесь указать свой локальный хост
 
-            var card = BankRepository.Cards.FirstOrDefault(c => c.Card_number == CARD_NUMBER);
             string answer = string.Empty;
 
             // Тестирует метод Pay(...)
@@ -55,15 +53,16 @@ namespace PaymentGateway.ClientConsoleUI
             {
                 Console.WriteLine("Производим трансферт на сумму {0} ...", AMOUNT_KOP);
                 answer = await payment.Pay(ORDER_NUMBER,
-                                               CARD_NUMBER,
-                                               EXPIRY_MONTH,
-                                               EXPIRY_YEAR,
-                                               CVV,
-                                               CARDHOLDER_NAME,
-                                               AMOUNT_KOP);
+                                           CARD_NUMBER,
+                                           EXPIRY_MONTH,
+                                           EXPIRY_YEAR,
+                                           CVV,
+                                           CARDHOLDER_NAME,
+                                           AMOUNT_KOP);
 
                 Console.WriteLine("Результат операции: {0}", answer);
                 Console.WriteLine();
+
                 var key = Console.ReadKey();
                 if (key.Key == ConsoleKey.Escape)
                     break;
