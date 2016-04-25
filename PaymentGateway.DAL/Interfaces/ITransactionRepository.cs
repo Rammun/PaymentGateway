@@ -9,6 +9,6 @@ namespace PaymentGateway.DAL.Interfaces
 {
     public interface ITransactionRepository : IRepository<Transaction, int>
     {
-
+        Transaction GetByOrderId(int id);
     }
 }

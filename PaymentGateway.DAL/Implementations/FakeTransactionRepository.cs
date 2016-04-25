@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.DAL.Implementations
 {
-    public class FakeTransactionRepository : ITransactionRepository
+    public sealed class FakeTransactionRepository : Singleton<FakeTransactionRepository>, ITransactionRepository
     {
         List<Transaction> transactions;
         ReadOnlyCollection<Transaction> transactionReadOnly;
 
-        public FakeTransactionRepository()
+        private FakeTransactionRepository()
         {
             transactions = new List<Transaction>();
             transactionReadOnly = new ReadOnlyCollection<Transaction>(transactions);
@@ -28,6 +28,11 @@ namespace PaymentGateway.DAL.Implementations
         public Transaction GetById(int id)
         {
             return transactions.Find(t => t.Id == id);
+        }
+
+        public Transaction GetByOrderId(int id)
+        {
+            return transactions.Find(t => t.Order_id == id);
         }
 
         public void Add(Transaction transaction)

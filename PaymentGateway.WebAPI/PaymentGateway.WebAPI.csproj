@@ -212,6 +212,10 @@
     <Content Include="Views\Data\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PaymentGateway.DAL\PaymentGateway.DAL.csproj">
+      <Project>{907681d9-62ea-44dd-a918-d24ad1b9e91f}</Project>
+      <Name>PaymentGateway.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PaymentGateway.Domain\PaymentGateway.Domain.csproj">
       <Project>{86489b2e-901f-426d-94a4-d33c0be7d13a}</Project>
       <Name>PaymentGateway.Domain</Name>

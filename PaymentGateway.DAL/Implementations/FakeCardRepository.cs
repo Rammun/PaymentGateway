@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.DAL.Implementations
 {
-    public class FakeCardRepository : ICardRepository
+    public sealed class FakeCardRepository : Singleton<FakeCardRepository>, ICardRepository
     {
         private List<Card> cards;
         private ReadOnlyCollection<Card> cardsReadOnly;
 
-        public FakeCardRepository()
+        private FakeCardRepository()
         {
             cards = new List<Card>
             {

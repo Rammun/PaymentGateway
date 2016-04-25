@@ -24,7 +24,7 @@ namespace PaymentGateway.DAL.Implementations
             get
             {
                 if (cards == null)
-                    cards = new FakeCardRepository();
+                    cards = FakeCardRepository.Instance;
                 return cards;
             }
         }
@@ -34,7 +34,7 @@ namespace PaymentGateway.DAL.Implementations
             get
             {
                 if (transactions == null)
-                    transactions = new FakeTransactionRepository();
+                    transactions = FakeTransactionRepository.Instance;
                 return transactions;
             }
         }

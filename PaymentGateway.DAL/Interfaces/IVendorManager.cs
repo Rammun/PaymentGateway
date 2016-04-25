@@ -10,6 +10,6 @@ namespace PaymentGateway.DAL.Interfaces
     public interface IVendorManager
     {
         IOrderRepository Orders { get; }
-        decimal Cash { get; set; }
+        //decimal Cash { get; set; }
     }
 }

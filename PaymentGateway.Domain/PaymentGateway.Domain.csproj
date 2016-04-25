@@ -42,6 +42,7 @@
     <Compile Include="BankRepository.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="Order.cs" />
+    <Compile Include="Singleton.cs" />
     <Compile Include="TransactionStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transaction.cs" />

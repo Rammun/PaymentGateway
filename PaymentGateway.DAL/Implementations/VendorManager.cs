@@ -22,11 +22,11 @@ namespace PaymentGateway.DAL.Implementations
             get
             {
                 if(orders == null)
-                    orders = new FakeOrderRepository();
+                    orders = FakeOrderRepository.Instance;
                 return orders;
             }
         }
 
-        public decimal Cash { get; set; }
+        public static decimal Cash { get; set; }
     }
 }

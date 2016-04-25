@@ -1,4 +1,5 @@
-﻿using PaymentGateway.Domain;
+﻿using PaymentGateway.DAL.Implementations;
+using PaymentGateway.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,23 @@ namespace PaymentGateway.WebAPI.Controllers
 {
     public class PaymentGatewayController : ApiController
     {
+        BankManager bankManager;
+        VendorManager vendorManager;
+
+        public PaymentGatewayController()
+        {
+            this.bankManager = new BankManager();
+            this.vendorManager = new VendorManager();
+        }
+
         [HttpPost]
         public string Pay(Transaction transaction)
-        {            
-            BankRepository.AddTransaction(transaction);
+        {
+            //BankRepository.AddTransaction(transaction);
+            bankManager.Transactions.Add(transaction);
             
-            var vendorOrder = VendorRepository.Orders.FirstOrDefault(o => o.Id == transaction.Order_id);
+            //var vendorOrder = VendorRepository.Orders.FirstOrDefault(o => o.Id == transaction.Order_id);
+            var vendorOrder = vendorManager.Orders.GetById(transaction.Order_id);
             if (vendorOrder == null)
             {
                 transaction.Status = TransactionStatus.Error;
@@ -24,7 +36,12 @@ namespace PaymentGateway.WebAPI.Controllers
             }
             else vendorOrder.TransactionId = transaction.Id;
 
-            var consumerCard = BankRepository.Cards.FirstOrDefault(c => (c.Card_number == transaction.Card_number &&
+            //var consumerCard = BankRepository.Cards.FirstOrDefault(c => (c.Card_number == transaction.Card_number &&
+            //                                                             c.Expiry_year == transaction.Expiry_year &&
+            //                                                             c.Expiry_month == transaction.Expiry_month &&
+            //                                                             c.Cvv == transaction.Cvv &&
+            //                                                             c.Cardholder_name == transaction.Cardholder_name));
+            var consumerCard = bankManager.Cards.GetAll().FirstOrDefault(c => (c.Card_number == transaction.Card_number &&
                                                                          c.Expiry_year == transaction.Expiry_year &&
                                                                          c.Expiry_month == transaction.Expiry_month &&
                                                                          c.Cvv == transaction.Cvv &&
@@ -54,7 +71,8 @@ namespace PaymentGateway.WebAPI.Controllers
             {
                 consumerCard.Cash_limit -= transaction.Amount_kop;
             }
-            VendorRepository.Cash += transaction.Amount_kop;
+            //VendorRepository.Cash += transaction.Amount_kop;
+            VendorManager.Cash += transaction.Amount_kop;
             transaction.Status = TransactionStatus.OK;
             transaction.Message = "Транзакция проведена успешно";
             return transaction.Message;
@@ -63,7 +81,8 @@ namespace PaymentGateway.WebAPI.Controllers
         [HttpGet]
         public string GetStatus(int order_id)
         {
-            var transaction = BankRepository.Transactions.FirstOrDefault(t => t.Order_id == order_id);
+            //var transaction = BankRepository.Transactions.FirstOrDefault(t => t.Order_id == order_id);
+            var transaction = bankManager.Transactions.GetByOrderId(order_id);
             if (transaction == null)
                 return "Отсутствует транзакция на этот заказ";
             return transaction.Status.ToString();
@@ -72,16 +91,19 @@ namespace PaymentGateway.WebAPI.Controllers
         [HttpDelete]
         public string Refund(int order_id)
         {
-            var transaction = BankRepository.Transactions.FirstOrDefault(t => t.Order_id == order_id);
+            //var transaction = BankRepository.Transactions.FirstOrDefault(t => t.Order_id == order_id);
+            var transaction = bankManager.Transactions.GetByOrderId(order_id);
             if(transaction == null)
                 return string.Format("Отсутствует транзакция на заказ {0}", order_id);
 
-            var card = BankRepository.Cards.FirstOrDefault(c => c.Card_number == transaction.Card_number);
+            //var card = BankRepository.Cards.FirstOrDefault(c => c.Card_number == transaction.Card_number);
+            var card = bankManager.Cards.GetById(transaction.Card_number);
 
             if (transaction.Status != TransactionStatus.OK)
                 return "Денежные средства по транзакции не переведены";
 
-            VendorRepository.Cash -= transaction.Amount_kop;
+            //VendorRepository.Cash -= transaction.Amount_kop;
+            VendorManager.Cash -= transaction.Amount_kop;
             if (card.Cash_limit != null)
                 card.Cash_limit += transaction.Amount_kop;
 
