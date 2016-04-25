@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.DAL.Interfaces
 {
-    public interface IVendorManager
+    public interface ICardRepository : IRepository<Card, string>
     {
-        IOrderRepository Orders { get; }
-        decimal Cash { get; set; }
+
     }
 }

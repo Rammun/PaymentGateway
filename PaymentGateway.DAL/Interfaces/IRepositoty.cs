@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.DAL.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T, U> where T : class
     {
         IEnumerable<T> GetAll();
-        T GetById(int id);
+        T GetById(U id);
         void Add(T item);
         void Update(T item);
-        void Delete(T item);
+        void Delete(U item);
     }
 }

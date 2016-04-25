@@ -10,21 +10,23 @@ namespace PaymentGateway.DAL.Implementations
 {
     public class VendorManager : IVendorManager
     {
-        public ICollection<Order> Orders
+        IOrderRepository orders;
+
+        public VendorManager()
         {
-            get { throw new NotImplementedException(); }
+            
         }
 
-        public decimal Cash
+        public IOrderRepository Orders
         {
             get
             {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
+                if(orders == null)
+                    orders = new FakeOrderRepository();
+                return orders;
             }
         }
+
+        public decimal Cash { get; set; }
     }
 }

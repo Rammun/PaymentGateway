@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.DAL.Interfaces
 {
-    public interface ITransactionRepository : IRepository<Transaction>
+    public interface ITransactionRepository : IRepository<Transaction, int>
     {
 
     }

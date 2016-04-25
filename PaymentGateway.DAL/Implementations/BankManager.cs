@@ -14,40 +14,29 @@ namespace PaymentGateway.DAL.Implementations
         ICardRepository cards;
         ITransactionRepository transactions;
 
-        public BankManager(ICardRepository cardRepository, ITransactionRepository transactionRepository)
+        public BankManager()
         {
-            this.cards = cardRepository;
-            this.transactions = transactionRepository;
-        }
-        public static ReadOnlyCollection<Card> Cards { get { return cards.GetALL(); } }
-        public static ReadOnlyCollection<Transaction> Transactions { get { return transactions.GetAll(); } }
-
-        public static void AddCard(Card card)
-        {
-            if (cards.FirstOrDefault(c => c.Card_number == card.Card_number) != null)
-                throw new Exception(string.Format("Карта с номером {0} существует", card.Card_number));
-            cards.Add(card);
+            
         }
 
-        public static void DeleteCard(string card_number)
+        public ICardRepository Cards
         {
-            var card = cards.FirstOrDefault(c => c.Card_number == card_number);
-            if (card == null)
-                throw new Exception("Попытка удалить несуществующую карту");
-            cards.Remove(card);
+            get
+            {
+                if (cards == null)
+                    cards = new FakeCardRepository();
+                return cards;
+            }
         }
 
-        public static void AddTransaction(Transaction transaction)
+        public ITransactionRepository Transactions
         {
-            transactions.Add(transaction);
-        }
-
-        public static void DeleteTransaction(int transaction_id)
-        {
-            var transaction = transactions.FirstOrDefault(t => t.Id == transaction_id);
-            if (transaction == null)
-                throw new Exception("Попытка удалить несуществующую транзакцию");
-            transactions.Remove(transaction);
+            get
+            {
+                if (transactions == null)
+                    transactions = new FakeTransactionRepository();
+                return transactions;
+            }
         }
     }
 }

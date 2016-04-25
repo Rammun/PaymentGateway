@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.DAL.Interfaces
 {
-    public interface IOrderRepository : IRepository<Order>
+    public interface IOrderRepository : IRepository<Order, int>
     {
 
     }

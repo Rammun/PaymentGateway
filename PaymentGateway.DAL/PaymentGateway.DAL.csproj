@@ -40,6 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementations\BankManager.cs" />
+    <Compile Include="Implementations\FakeCardRepository.cs" />
+    <Compile Include="Implementations\FakeOrderRepository.cs" />
+    <Compile Include="Implementations\FakeTransactionRepository.cs" />
     <Compile Include="Interfaces\IBankManager.cs" />
     <Compile Include="Interfaces\ICardRepository.cs" />
     <Compile Include="Interfaces\IOrderRepository.cs" />
